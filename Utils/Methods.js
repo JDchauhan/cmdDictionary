@@ -67,3 +67,27 @@ module.exports.randomWord = () => {
         )
     })
 }
+
+module.exports.wordFullDetails = async (word) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const definetion = await this.definetion(word)
+            const synonym = await this.relatedWords(word, 'synonym')
+            const antonym = await this.relatedWords(word, 'antonym')
+            const examples = await this.exampleWords(word)
+
+            console.log('~~~~~~~~~~~~~~~DEFINITION~~~~~~~~~~~~~~~~~~~~')
+            console.log(definetion.join('\n'))
+            console.log('~~~~~~~~~~~~~~~SYNONYMS~~~~~~~~~~~~~~~~~~~~')
+            console.log(typeof synonym === 'string' ? synonym : synonym.join(', '))
+            console.log('~~~~~~~~~~~~~~~ANTONYMS~~~~~~~~~~~~~~~~~~~~')
+            console.log(typeof antonym === 'string' ? antonym : antonym.join(', '))
+            console.log('~~~~~~~~~~~~~~~WORD EXAMPLE~~~~~~~~~~~~~~~~~~~~')
+            console.log(examples)
+            resolve()
+        } catch (err) {
+            console.log(err)
+            reject(err)
+        }
+    })
+}
