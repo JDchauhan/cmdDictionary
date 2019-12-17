@@ -2,6 +2,7 @@
 
 'use strict'
 
+const readline = require('readline')
 const AxiosUtil = require('./AxiosUtils')
 
 module.exports.definetion = (word = 'grain') => {
@@ -129,4 +130,57 @@ const jumbled = (string) => {
         }
     }
     return permutations
+}
+module.exports.play = async () => {
+    const word = await this.randomWord()
+
+    const definetion = await this.definetion(word)
+    const synonym = await this.relatedWords(word, 'synonym')
+    const antonym = await this.relatedWords(word, 'antonym')
+
+    let hints = definetion.concat(synonym)
+    if (typeof antonym !== 'string') {
+        hints = hints.concat(antonym)
+    }
+
+    console.log('!@', word)
+
+    console.log(hints.splice([randomNum(hints.length) - 1], 1)[0])
+
+    const readlineInterface = readline.createInterface(process.stdin, process.stdout)
+    const input = (questionText) => {
+        return new Promise((resolve, reject) => {
+            readlineInterface.question(questionText, resolve)
+        })
+    }
+
+    let guess = await input('guess the word: ')
+
+    let choice
+    while (!(guess === word || synonym.indexOf(guess) !== -1)) {
+        const jumbledWord = jumbled(word)
+        hints = hints.concat(jumbledWord)
+
+        choice = await input('Wrong Choice!!! type 1 to try again, 2 for hint, 3 for quit: ')
+        switch (parseInt(choice)) {
+        case 1:
+            guess = await input('guess the word: ')
+            console.log(guess)
+            break
+
+        case 2:
+            console.log(hints.splice([randomNum(hints.length) - 1], 1)[0])
+            guess = await input('guess the word: ')
+            console.log(guess)
+            break
+
+        case 3:
+            console.log('~~~~~~~~~~~~~~~~~WORD~~~~~~~~~~~~~~~~')
+            console.log(word)
+            await this.wordFullDetails(word)
+            process.exit(0)
+        }
+    }
+    console.log('Success!!!')
+    process.exit(0)
 }
