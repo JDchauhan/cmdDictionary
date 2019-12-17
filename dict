@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const dotenv = require('dotenv')
+dotenv.config()
+
+const args = process.argv.slice(2)
+
+const [funct, word] = args
+
+console.log(funct)
+console.log(word)
+
+const Methods = require('./Utils/Methods')
+
+Methods.definetion(word).then(
+    data => console.log(data.join('\n')),
+    err => console.log(err)
+)
