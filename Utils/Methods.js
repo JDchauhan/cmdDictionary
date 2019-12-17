@@ -22,3 +22,20 @@ module.exports.definetion = (word = 'grain') => {
         )
     })
 }
+
+module.exports.relatedWords = (word = 'grain', relationshipType = 'synonym') => {
+    return new Promise((resolve, reject) => {
+        const PATH = `/word/${word}/relatedWords`
+        AxiosUtil.get(PATH).then(
+            data => {
+                let synonyms = data.find(obj => obj.relationshipType === relationshipType);
+                if (synonyms) {
+                    resolve(synonyms.words)
+                } else {
+                    resolve(`Sorry! No ${relationshipType} found`)
+                }
+            },
+            err => reject(err.response.data.error)
+        )
+    })
+}
