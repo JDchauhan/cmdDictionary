@@ -91,3 +91,14 @@ module.exports.wordFullDetails = async (word) => {
         }
     })
 }
+
+module.exports.wordOfDay = async () => {
+    try {
+        const word = await this.randomWord()
+        console.log('~~~~~~~~~~~~~~~WORD OF DAY~~~~~~~~~~~~~~~~~~~~')
+        console.log(word)
+        this.wordFullDetails(word)
+    } catch (err) {
+        console.log(err)
+    }
+}
