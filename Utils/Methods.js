@@ -29,7 +29,7 @@ module.exports.relatedWords = (word = 'grain', relationshipType = 'synonym') => 
         AxiosUtil.get(PATH).then(
             data => {
                 // eslint-disable-next-line prefer-const
-                let synonyms = data.find(obj => obj.relationshipType === relationshipType);
+                let synonyms = data.find(obj => obj.relationshipType === relationshipType)
                 if (synonyms) {
                     resolve(synonyms.words)
                 } else {
@@ -53,6 +53,16 @@ module.exports.exampleWords = (word = 'grain') => {
                 })
                 resolve(result)
             },
+            err => reject(err.response.data.error)
+        )
+    })
+}
+
+module.exports.randomWord = () => {
+    return new Promise((resolve, reject) => {
+        const PATH = '/words/randomWord'
+        AxiosUtil.get(PATH).then(
+            word => resolve(word.word),
             err => reject(err.response.data.error)
         )
     })
