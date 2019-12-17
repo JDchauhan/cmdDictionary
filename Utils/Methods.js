@@ -143,8 +143,6 @@ module.exports.play = async () => {
         hints = hints.concat(antonym)
     }
 
-    console.log('!@', word)
-
     console.log(hints.splice([randomNum(hints.length) - 1], 1)[0])
 
     const readlineInterface = readline.createInterface(process.stdin, process.stdout)

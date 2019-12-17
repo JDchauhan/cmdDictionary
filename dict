@@ -9,12 +9,60 @@ const args = process.argv.slice(2)
 
 const [funct, word] = args
 
-console.log(funct)
-console.log(word)
-
 const Methods = require('./Utils/Methods')
 
-Methods.definetion(word).then(
-    data => console.log(data.join('\n')),
-    err => console.log(err)
-)
+const main = async () => {
+    switch (funct) {
+    case 'defn':
+        Methods.definetion(word).then(
+            data => console.log(data.join('\n')),
+            err => console.log(err)
+        )
+        break
+
+    case 'syn':
+        Methods.relatedWords(word, 'synonym').then(
+            synonym => {
+                synonym = typeof synonym === 'string' ? synonym : synonym.join(', ')
+                console.log(synonym)
+            },
+            err => console.log(err)
+        )
+        break
+
+    case 'ant':
+        Methods.relatedWords(word, 'antonym').then(
+            antonym => {
+                antonym = typeof antonym === 'string' ? antonym : antonym.join(', ')
+                console.log(antonym)
+            },
+            err => console.log(err)
+        )
+        break
+
+    case 'ex':
+        Methods.exampleWords(word, 'antonym').then(
+            data => console.log(data),
+            err => console.log(err)
+        )
+        break
+
+    case 'play':
+        Methods.play()
+        break
+
+    default:
+        if (args.length > 0) {
+            Methods.wordFullDetails(args[0]).catch(
+                err => console.log(err)
+            )
+        } else {
+            Methods.wordOfDay().catch(
+                err => console.log(err)
+            )
+        }
+        break
+    }
+}
+
+main()
